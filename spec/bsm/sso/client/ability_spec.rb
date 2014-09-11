@@ -53,18 +53,20 @@ describe Bsm::Sso::Client::Ability do
   describe "class" do
     subject { Bsm::Sso::Client::TestAbility }
 
-    it { should have(2).roles }
+    its("roles.size") { should eq(2) }
 
     describe "roles" do
       subject { Bsm::Sso::Client::TestAbility.roles }
       it { should be_instance_of(Hash) }
       its(:keys) { should =~ [:employee, :client] }
-      its([:employee]) { should have(4).items }
-      its([:client])   { should have(3).items }
+      it "should be identified by user type" do
+        subject[:employee].size.should eq(4)
+        subject[:client].size.should eq(3)
+      end
     end
 
     it 'should define role methods' do
-      subject.should have(7).private_instance_methods(false)
+      subject.private_instance_methods(false).size.should eq(7)
       subject.private_instance_methods(false).should include(:"as__client__main:role")
     end
   end
