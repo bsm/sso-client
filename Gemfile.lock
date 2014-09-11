@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    bsm-sso-client (0.9.0)
+    bsm-sso-client (0.9.1)
       actionpack
       activesupport
       excon (>= 0.27.0, < 1.0.0)
@@ -41,7 +41,7 @@ GEM
       safe_yaml (~> 1.0.0)
     diff-lcs (1.2.5)
     erubis (2.7.0)
-    excon (0.33.0)
+    excon (0.39.5)
     has_scope (0.6.0.rc)
       actionpack (>= 3.2, < 5)
       activesupport (>= 3.2, < 5)

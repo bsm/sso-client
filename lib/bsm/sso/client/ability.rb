@@ -50,11 +50,11 @@ module Bsm::Sso::Client::Ability
   # @param [User] current user record
   def initialize(user)
     @user = user
+
+    same_as(:any)
     @user.roles.each do |name|
       same_as(name)
     end
-
-    same_as(:any)
     same_as(:administrator) if administrator?
   end
 

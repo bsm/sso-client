@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.name        = "bsm-sso-client"
   s.summary     = "BSM's internal SSO client"
   s.description = ""
-  s.version     = '0.9.0'
+  s.version     = '0.9.1'
 
   s.authors     = ["Dimitrij Denissenko"]
   s.email       = "dimitrij@blacksquaremedia.com"

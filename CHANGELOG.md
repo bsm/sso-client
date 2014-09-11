@@ -1,0 +1,1 @@
+* `0.9.1` - Ensure rules added in `:any` roles can be overridden by more restrictive roles

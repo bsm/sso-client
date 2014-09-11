@@ -20,6 +20,10 @@ describe Bsm::Sso::Client::Ability do
     as :employee, "other:role" do
     end
 
+    as :employee, "restrictive:role" do
+      @is_any = nil
+    end
+
     as :employee, "any" do
       @is_any = true
     end
@@ -37,9 +41,10 @@ describe Bsm::Sso::Client::Ability do
     end
   end
 
-  let(:client)   { new_user "client", 0, "sub:role" }
-  let(:employee) { new_user "employee", 60 }
-  let(:admin)    { new_user "employee", 90 }
+  let(:client)      { new_user "client", 0, "sub:role" }
+  let(:employee)    { new_user "employee", 60 }
+  let(:restrictive) { new_user "employee", 60, "restrictive:role" }
+  let(:admin)       { new_user "employee", 90 }
 
   subject do
     Bsm::Sso::Client::TestAbility.new(client)
@@ -54,12 +59,12 @@ describe Bsm::Sso::Client::Ability do
       subject { Bsm::Sso::Client::TestAbility.roles }
       it { should be_instance_of(Hash) }
       its(:keys) { should =~ [:employee, :client] }
-      its([:employee]) { should have(3).items }
+      its([:employee]) { should have(4).items }
       its([:client])   { should have(3).items }
     end
 
     it 'should define role methods' do
-      subject.should have(6).private_instance_methods(false)
+      subject.should have(7).private_instance_methods(false)
       subject.private_instance_methods(false).should include(:"as__client__main:role")
     end
   end
@@ -81,6 +86,12 @@ describe Bsm::Sso::Client::Ability do
   it 'should apply generic any role to ALL users (if defined)' do
     subject.is_any.should be_nil
     Bsm::Sso::Client::TestAbility.new(employee).is_any.should be(true)
+    Bsm::Sso::Client::TestAbility.new(admin).is_any.should be(true)
+  end
+
+  it 'should retract any generic addition if specified by other roles' do
+    subject.is_any.should be_nil
+    Bsm::Sso::Client::TestAbility.new(restrictive).is_any.should be_nil
     Bsm::Sso::Client::TestAbility.new(admin).is_any.should be(true)
   end
 
