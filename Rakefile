@@ -1,5 +1,5 @@
+require 'bundler/setup'
 require 'rake'
-require 'rspec/mocks/version'
 require 'rspec/core/rake_task'
 require 'bundler/gem_tasks'
 

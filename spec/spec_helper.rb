@@ -5,13 +5,14 @@ ENV["RAILS_ENV"] ||= 'test'
 
 require 'rubygems'
 require 'bundler/setup'
+require 'rspec'
+require 'rspec/its'
 require 'webmock/rspec'
+require 'shoulda/matchers'
 WebMock.disable_net_connect!
 
 require 'rails'
 require 'active_record'
-require 'rspec'
-require 'shoulda/matchers'
 require 'protected_attributes' if ENV['SSO_PA']
 require 'bsm/sso/client'
 
