@@ -13,8 +13,8 @@ describe Bsm::Sso::Client::FailureApp do
   describe "for HTML requests" do
 
     it "should redirect to SSO" do
-      response.code.should == "303"
-      response.location.should == "https://sso.test.host/sign_in?service=http%3A%2F%2Fexample.org%2F%3Fa%3D1%26b%5B%5D%3D2%26b%5B%5D%3D3"
+      expect(response.code).to eq("303")
+      expect(response.location).to eq("https://sso.test.host/sign_in?service=http%3A%2F%2Fexample.org%2F%3Fa%3D1%26b%5B%5D%3D2%26b%5B%5D%3D3")
     end
 
   end
@@ -26,8 +26,8 @@ describe Bsm::Sso::Client::FailureApp do
     end
 
     it "should fail with 403" do
-      response.code.should == "403"
-      response.content_type.should == Mime::HTML
+      expect(response.code).to eq("403")
+      expect(response.content_type).to eq(Mime::HTML)
     end
 
   end
@@ -39,8 +39,8 @@ describe Bsm::Sso::Client::FailureApp do
     end
 
     it "should redirect to SSO" do
-      response.code.should == "303"
-      response.location.should == "https://sso.test.host/sign_in?service=http%3A%2F%2Fexample.org%2F%3Fa%3D1%26b%5B%5D%3D2%3Fformat%3Djson"
+      expect(response.code).to eq("303")
+      expect(response.location).to eq("https://sso.test.host/sign_in?service=http%3A%2F%2Fexample.org%2F%3Fa%3D1%26b%5B%5D%3D2%3Fformat%3Djson")
     end
 
   end
@@ -52,9 +52,9 @@ describe Bsm::Sso::Client::FailureApp do
     end
 
     it "should respond with JS" do
-      response.code.should == "200"
-      response.content_type.should == Mime::JS
-      response.body.should include("alert(")
+      expect(response.code).to eq("200")
+      expect(response.content_type).to eq(Mime::JS)
+      expect(response.body).to include("alert(")
     end
 
   end

@@ -27,7 +27,7 @@ RSpec.configure do |c|
   c.include(Bsm::Sso::Client::SpecHelpers)
 
   c.before do
-    Bsm::Sso::Client.stub secret: "SECRET"
+    allow(Bsm::Sso::Client).to receive_messages secret: "SECRET"
   end
 end
 
@@ -39,12 +39,12 @@ ActiveRecord::Base.connection.create_table :users do |t|
   t.integer :level
   t.string  :authentication_token
   t.text    :roles
-  t.timestamps
+  t.timestamps null: false
 end
 
 class User < ActiveRecord::Base
   include Bsm::Sso::Client::Cached::ActiveRecord
-  serialize :roles, Hash
+  serialize :roles, Array
 
   if defined?(ProtectedAttributes)
     attr_accessible :roles, as: :sso

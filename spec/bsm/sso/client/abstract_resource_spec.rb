@@ -7,20 +7,20 @@ describe Bsm::Sso::Client::AbstractResource do
   end
 
   before do
-    Bsm::Sso::Client.verifier.stub generate: "TOKEN"
+    allow(Bsm::Sso::Client.verifier).to receive_messages generate: "TOKEN"
   end
 
   it 'should use site from configuration' do
     site = described_class.site
-    site.should be_instance_of(Excon::Connection)
-    site.data[:host].should == "sso.test.host"
-    site.data[:idempotent].should be(true)
-    site.data[:headers].should == { "Accept"=>"application/json", "Content-Type"=>"application/json" }
+    expect(site).to be_instance_of(Excon::Connection)
+    expect(site.data[:host]).to eq("sso.test.host")
+    expect(site.data[:idempotent]).to be(true)
+    expect(site.data[:headers]).to eq({ "Accept"=>"application/json", "Content-Type"=>"application/json" })
   end
 
   it 'should set default headers using secret' do
     headers = described_class.headers
-    headers.should == {"Authorization"=>"TOKEN"}
+    expect(headers).to eq({"Authorization"=>"TOKEN"})
   end
 
   it 'should get remote records' do
@@ -34,17 +34,17 @@ describe Bsm::Sso::Client::AbstractResource do
       }).to_return status: 200, body: %({ "id": 123 })
 
     result  = described_class.get("/users/123", headers: { 'a' => 1 }, query: { 'b' => 2 })
-    result.should be_instance_of(described_class)
-    result.should == { "id" => 123 }
-    result.id.should == 123
+    expect(result).to be_instance_of(described_class)
+    expect(result).to eq({ "id" => 123 })
+    expect(result.id).to eq(123)
 
-    request.should have_been_made
+    expect(request).to have_been_made
   end
 
   it 'should not fail on error known responses' do
     request = stub_request(:get, "https://sso.test.host/users/1").to_return status: 422
-    described_class.get("/users/1").should be(nil)
-    request.should have_been_made
+    expect(described_class.get("/users/1")).to be(nil)
+    expect(request).to have_been_made
   end
 
   it 'should get remote collection' do
@@ -58,21 +58,21 @@ describe Bsm::Sso::Client::AbstractResource do
       }).to_return status: 200, body: %([{ "id": 123 }])
 
     result  = described_class.get("/users", headers: { 'a' => 1 }, query: { 'b' => 2 }, collection: true)
-    result.should be_an(Array)
-    result.first.should be_instance_of(described_class)
-    result.first.should == { "id" => 123 }
-    result.first.id.should == 123
+    expect(result).to be_an(Array)
+    expect(result.first).to be_instance_of(described_class)
+    expect(result.first).to eq({ "id" => 123 })
+    expect(result.first.id).to eq(123)
 
-    request.should have_been_made
+    expect(request).to have_been_made
   end
 
-  it { should be_a(Hash) }
-  it { should respond_to(:email) }
-  it { should respond_to(:email=) }
-  it { should respond_to(:email?) }
-  it { should_not respond_to(:name) }
-  it { should_not respond_to(:name=) }
-  it { should_not respond_to(:name?) }
+  it { is_expected.to be_a(Hash) }
+  it { is_expected.to respond_to(:email) }
+  it { is_expected.to respond_to(:email=) }
+  it { is_expected.to respond_to(:email?) }
+  it { is_expected.not_to respond_to(:name) }
+  it { is_expected.not_to respond_to(:name=) }
+  it { is_expected.not_to respond_to(:name?) }
 
   its(:email)  { should == "noreply@example.com" }
   its(:email?) { should == "noreply@example.com" }
@@ -82,18 +82,18 @@ describe Bsm::Sso::Client::AbstractResource do
 
   it 'should allow attribute assignment' do
     subject.email = "new@example.com"
-    subject.email.should == "new@example.com"
+    expect(subject.email).to eq("new@example.com")
 
     subject.name  = "Name"
-    subject.name.should == "Name"
+    expect(subject.name).to eq("Name")
   end
 
   it 'should should have string attributes' do
-    described_class.new(id: 1).should == {"id" => 1}
+    expect(described_class.new(id: 1)).to eq({"id" => 1})
   end
 
   it 'can be blank' do
-    described_class.new.should == {}
+    expect(described_class.new).to eq({})
   end
 
 end

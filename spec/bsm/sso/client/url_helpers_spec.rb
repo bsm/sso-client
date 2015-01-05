@@ -19,11 +19,11 @@ describe Bsm::Sso::Client::UrlHelpers do
   end
 
   it "should normalized the requested url" do
-    strategy.service_url.should == "http://example.org/"
-    strategy(:ticket, "ST-1234-ABCD").service_url.should == "http://example.org/"
-    strategy( :a, "1", :ticket, "ST-1234-ABCD").service_url.should == "http://example.org/?a=1"
-    strategy(:ticket, "ST-1234-ABCD", :z, '3').service_url.should == "http://example.org/?z=3"
-    strategy(:a, "1", :ticket, "ST-1234-ABCD", :z, "3").service_url.should == "http://example.org/?a=1&z=3"
+    expect(strategy.service_url).to eq("http://example.org/")
+    expect(strategy(:ticket, "ST-1234-ABCD").service_url).to eq("http://example.org/")
+    expect(strategy( :a, "1", :ticket, "ST-1234-ABCD").service_url).to eq("http://example.org/?a=1")
+    expect(strategy(:ticket, "ST-1234-ABCD", :z, '3').service_url).to eq("http://example.org/?z=3")
+    expect(strategy(:a, "1", :ticket, "ST-1234-ABCD", :z, "3").service_url).to eq("http://example.org/?a=1&z=3")
   end
 
 end

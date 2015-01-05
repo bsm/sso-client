@@ -6,10 +6,10 @@ describe Bsm::Sso::Client::Strategies::Base do
     described_class.new(env_with_params)
   end
 
-  it { should be_a(described_class) }
+  it { is_expected.to be_a(described_class) }
 
   it "should reference user class" do
-    subject.user_class.should == Bsm::Sso::Client::User
+    expect(subject.user_class).to eq(Bsm::Sso::Client::User)
   end
 
 end

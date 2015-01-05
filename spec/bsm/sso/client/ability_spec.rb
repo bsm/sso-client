@@ -53,53 +53,53 @@ describe Bsm::Sso::Client::Ability do
   describe "class" do
     subject { Bsm::Sso::Client::TestAbility }
 
-    its("roles.size") { should eq(2) }
+    its("roles.size") { is_expected.to eq(2) }
 
     describe "roles" do
       subject { Bsm::Sso::Client::TestAbility.roles }
-      it { should be_instance_of(Hash) }
-      its(:keys) { should =~ [:employee, :client] }
+      it { is_expected.to be_instance_of(Hash) }
+      its(:keys) { is_expected.to match_array([:employee, :client]) }
       it "should be identified by user type" do
-        subject[:employee].size.should eq(4)
-        subject[:client].size.should eq(3)
+        expect(subject[:employee].size).to eq(4)
+        expect(subject[:client].size).to eq(3)
       end
     end
 
     it 'should define role methods' do
-      subject.private_instance_methods(false).size.should eq(7)
-      subject.private_instance_methods(false).should include(:"as__client__main:role")
+      expect(subject.private_instance_methods(false).size).to eq(7)
+      expect(subject.private_instance_methods(false)).to include(:"as__client__main:role")
     end
   end
 
-  its(:scope) { should == :client }
-  its(:applied) { should == ["main:role", "sub:role"].to_set }
+  its(:scope) { is_expected.to eq(:client) }
+  its(:applied) { is_expected.to eq(["main:role", "sub:role"].to_set) }
 
   it 'should apply roles only once' do
-    subject.same_as("main:role").should be(false)
-    subject.same_as("sub:role").should be(false)
-    subject.same_as("other:role").should be(true)
+    expect(subject.same_as("main:role")).to be(false)
+    expect(subject.same_as("sub:role")).to be(false)
+    expect(subject.same_as("other:role")).to be(true)
   end
 
   it 'should not allow role application from different scopes' do
-    subject.send("as__employee__other:role").should be(false)
-    subject.send("as__client__other:role").should be(true)
+    expect(subject.send("as__employee__other:role")).to be(false)
+    expect(subject.send("as__client__other:role")).to be(true)
   end
 
   it 'should apply generic any role to ALL users (if defined)' do
-    subject.is_any.should be_nil
-    Bsm::Sso::Client::TestAbility.new(employee).is_any.should be(true)
-    Bsm::Sso::Client::TestAbility.new(admin).is_any.should be(true)
+    expect(subject.is_any).to be_nil
+    expect(Bsm::Sso::Client::TestAbility.new(employee).is_any).to be(true)
+    expect(Bsm::Sso::Client::TestAbility.new(admin).is_any).to be(true)
   end
 
   it 'should retract any generic addition if specified by other roles' do
-    subject.is_any.should be_nil
-    Bsm::Sso::Client::TestAbility.new(restrictive).is_any.should be_nil
-    Bsm::Sso::Client::TestAbility.new(admin).is_any.should be(true)
+    expect(subject.is_any).to be_nil
+    expect(Bsm::Sso::Client::TestAbility.new(restrictive).is_any).to be_nil
+    expect(Bsm::Sso::Client::TestAbility.new(admin).is_any).to be(true)
   end
 
   it 'should apply generic administrator role to admin users (if defined)' do
-    subject.is_admin.should be_nil
-    Bsm::Sso::Client::TestAbility.new(employee).is_admin.should be_nil
-    Bsm::Sso::Client::TestAbility.new(admin).is_admin.should be(true)
+    expect(subject.is_admin).to be_nil
+    expect(Bsm::Sso::Client::TestAbility.new(employee).is_admin).to be_nil
+    expect(Bsm::Sso::Client::TestAbility.new(admin).is_admin).to be(true)
   end
 end

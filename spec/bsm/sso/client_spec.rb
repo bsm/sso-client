@@ -4,50 +4,50 @@ describe Bsm::Sso::Client do
 
   it 'should be configurable' do
     described_class.configure do |c|
-      c.should respond_to(:site=)
-      c.should respond_to(:secret=)
-      c.site.should be_instance_of(Excon::Connection)
-      c.secret.should == "SECRET"
+      expect(c).to respond_to(:site=)
+      expect(c).to respond_to(:secret=)
+      expect(c.site).to be_instance_of(Excon::Connection)
+      expect(c.secret).to eq("SECRET")
     end
   end
 
   it 'should allow to configure warden' do
-    described_class.warden_configuration.should be_nil
+    expect(described_class.warden_configuration).to be_nil
     block = lambda {|m| }
     described_class.warden &block
-    described_class.warden_configuration.should == block
+    expect(described_class.warden_configuration).to eq(block)
   end
 
   it 'should have a default user class' do
-    described_class.user_class.should == described_class::User
+    expect(described_class.user_class).to eq(described_class::User)
   end
 
   it 'should allow setting user class with class' do
     klass = Class.new
     described_class.user_class = klass
-    described_class.user_class.should == klass
+    expect(described_class.user_class).to eq(klass)
   end
 
   it 'should allow setting user class with name' do
     described_class.user_class = 'Bsm::Sso::Client::User'
-    described_class.user_class.should == described_class::User
+    expect(described_class.user_class).to eq(described_class::User)
   end
 
   it 'should have a message verifier' do
     v = described_class.verifier
-    v.should be_a(ActiveSupport::MessageVerifier)
+    expect(v).to be_a(ActiveSupport::MessageVerifier)
     time = Time.now
-    v.verify(v.generate(time)).should == time
+    expect(v.verify(v.generate(time))).to eq(time)
   end
 
   it 'should have a default user class' do
     request = double "Request", path: "/admin"
-    lambda { described_class.forbidden!(request) }.should raise_error(Bsm::Sso::Client::UnauthorizedAccess)
+    expect { described_class.forbidden!(request) }.to raise_error(Bsm::Sso::Client::UnauthorizedAccess)
   end
 
   it 'should have a cache store' do
-    described_class.cache_store.should be_instance_of(ActiveSupport::Cache::NullStore)
-    described_class.cache_store.options.should == { namespace: "bsm:sso:client:test" }
+    expect(described_class.cache_store).to be_instance_of(ActiveSupport::Cache::NullStore)
+    expect(described_class.cache_store.options).to eq({ namespace: "bsm:sso:client:test" })
   end
 
 end
