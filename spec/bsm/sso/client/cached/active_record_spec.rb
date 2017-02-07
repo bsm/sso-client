@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Bsm::Sso::Client::Cached::ActiveRecord do
+describe Bsm::Sso::Client::Cached::ActiveRecord, type: :model do
 
   before do
     I18n.enforce_available_locales = false
