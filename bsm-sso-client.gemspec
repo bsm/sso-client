@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.files        = Dir['lib/**/*']
 
-  s.add_dependency "railties", ">= 4.1.0", "< 6.0.0"
+  s.add_dependency "railties", ">= 5.0.0", "< 6.0.0"
   s.add_dependency "actionpack"
   s.add_dependency "activesupport"
   s.add_dependency "rails_warden", "~> 0.5.0"

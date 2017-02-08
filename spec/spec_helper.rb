@@ -45,10 +45,6 @@ class User < ActiveRecord::Base
   include Bsm::Sso::Client::Cached::ActiveRecord
   serialize :roles, Array
 
-  if defined?(ProtectedAttributes)
-    attr_accessible :roles, as: :sso
-  end
-
   def employee?
     level >= 60
   end

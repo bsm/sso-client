@@ -17,7 +17,6 @@ describe Bsm::Sso::Client::Cached::ActiveRecord, type: :model do
 
   let :record do
     args = [{id: 100, email: "alice@example.com", kind: "user", level: 10, authentication_token: "SECRET"}]
-    args << {without_protection: true} if defined?(ProtectedAttributes)
     User.create! *args
   end
 
