@@ -1,5 +1,4 @@
 class Bsm::Sso::Client::FailureApp < ActionController::Metal
-  include ActionController::RackDelegation
   include ActionController::Redirecting
   include Bsm::Sso::Client::UrlHelpers
 
@@ -12,7 +11,7 @@ class Bsm::Sso::Client::FailureApp < ActionController::Metal
   end
 
   def respond
-    if Bsm::Sso::Client.navigational_formats.include?(request.format.try(:to_sym)) || request.accepts.include?(Mime::HTML)
+    if Bsm::Sso::Client.navigational_formats.include?(request.format.try(:to_sym)) || request.accepts.include?(Mime[:html])
       request.xhr? ? respond_with_js! : redirect!
     else
       stop!
@@ -20,7 +19,7 @@ class Bsm::Sso::Client::FailureApp < ActionController::Metal
   end
 
   def redirect!
-    path = env["warden.options"].try(:[], :attempted_path) || request.fullpath
+    path = request.env["warden.options"].try(:[], :attempted_path) || request.fullpath
     redirect_to Bsm::Sso::Client.user_class.sso_sign_in_url(:service => service_url(path)), :status => 303
   end
 
@@ -32,7 +31,7 @@ class Bsm::Sso::Client::FailureApp < ActionController::Metal
 
   def stop!
     self.status = 403
-    self.content_type  = Mime::HTML
+    self.content_type  = Mime[:html]
     self.response_body = "<html><head></head><body><h1>Access Forbidden</h1></body></html>"
   end
 

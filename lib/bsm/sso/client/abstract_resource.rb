@@ -12,7 +12,7 @@ class Bsm::Sso::Client::AbstractResource < Hash
       @site = Excon.new url,
         :idempotent => true,
         :expects    => [200, 422],
-        :headers    => { 'Accept' => Mime::JSON.to_s, 'Content-Type' => Mime::JSON.to_s }
+        :headers    => { 'Accept' => Mime[:json].to_s, 'Content-Type' => Mime[:json].to_s }
     end
 
     # @return [Excon::Connection] site connection

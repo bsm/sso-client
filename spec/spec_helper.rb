@@ -13,7 +13,6 @@ require 'shoulda/matchers'
 WebMock.disable_net_connect!
 
 require 'rails'
-require 'protected_attributes' if ENV['SSO_PA']
 require 'bsm/sso/client'
 
 Dir[File.join(File.dirname(__FILE__), "support", "**/*.rb")].each do |f|

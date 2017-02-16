@@ -27,7 +27,7 @@ describe Bsm::Sso::Client::FailureApp do
 
     it "should fail with 403" do
       expect(response.code).to eq("403")
-      expect(response.content_type).to eq(Mime::HTML)
+      expect(response.content_type).to eq(Mime[:html])
     end
 
   end
@@ -53,7 +53,7 @@ describe Bsm::Sso::Client::FailureApp do
 
     it "should respond with JS" do
       expect(response.code).to eq("200")
-      expect(response.content_type).to eq(Mime::JS)
+      expect(response.content_type).to eq(Mime[:js])
       expect(response.body).to include("alert(")
     end
 
