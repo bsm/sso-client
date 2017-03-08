@@ -42,10 +42,9 @@ class Bsm::Sso::Client::User < Bsm::Sso::Client::AbstractResource
         end
 
         url  = "#{conn[:scheme]}://#{conn[:host]}#{port}/#{method_name.to_s}"
-        url << "?#{params.to_query}" unless params.empty?
+        url << "?#{params.to_h.to_query}" unless params.empty?
         url
       end
 
   end
 end
-
