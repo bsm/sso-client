@@ -10,9 +10,10 @@ class Bsm::Sso::Client::AbstractResource < Hash
     # @param [String] url
     def site=(url)
       @site = Excon.new url,
-        :idempotent => true,
-        :expects    => [200, 422],
-        :headers    => { 'Accept' => Mime[:json].to_s, 'Content-Type' => Mime[:json].to_s }
+        mock:       defined?(WebMock),
+        idempotent: true,
+        expects:    [200, 422],
+        headers:    { 'Accept' => Mime[:json].to_s, 'Content-Type' => Mime[:json].to_s }
     end
 
     # @return [Excon::Connection] site connection
@@ -43,7 +44,7 @@ class Bsm::Sso::Client::AbstractResource < Hash
         instance if instance.id
       end.compact
       collection ? result : result.first
-    rescue MultiJson::DecodeError
+    rescue ActiveSupport::JSON.parse_error
       collection ? [] : nil
     end
 

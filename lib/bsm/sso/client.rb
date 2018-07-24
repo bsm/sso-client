@@ -69,7 +69,7 @@ module Bsm
         #
         #   # config/initializers/sso.rb
         #   Bsm::Sso::Client.configure do |c|
-        #     c.site = "https://sso.example.com"
+        #     c.site = "https://sso.test.host"
         #     c.secret = "m4GHRWxvXiL3ZSR8adShpqNWXmepkqeyUqRfpB8F"
         #   end
         def configure(&block)
