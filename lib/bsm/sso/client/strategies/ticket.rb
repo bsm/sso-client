@@ -12,5 +12,3 @@ class Bsm::Sso::Client::Strategies::Ticket < Bsm::Sso::Client::Strategies::Base
 
   Warden::Strategies.add :sso_ticket, self
 end
-
-

@@ -8,7 +8,7 @@ describe Bsm::Sso::Client::Strategies::Base do
 
   it { is_expected.to be_a(described_class) }
 
-  it "should reference user class" do
+  it 'should reference user class' do
     expect(subject.user_class).to eq(Bsm::Sso::Client::User)
   end
 

@@ -15,9 +15,9 @@ class Bsm::Sso::Client::Strategies::HttpAuth < Bsm::Sso::Client::Strategies::Bas
 
   def token
     return nil unless request.authorization && request.authorization =~ /^Basic (.*)/m
-    @token ||= Base64.decode64($1).split(/:/, 2).first
+
+    @token ||= Base64.decode64(Regexp.last_match(1)).split(/:/, 2).first
   end
 
   Warden::Strategies.add :sso_http_auth, self
 end
-

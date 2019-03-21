@@ -1,6 +1,6 @@
 begin
   require 'cancan/ability'
-rescue LoadError => e
+rescue LoadError
   warn "\n [!] Please install `cancan` Gem to use the Ability module\n"
   raise
 end
@@ -13,16 +13,14 @@ module Bsm::Sso::Client::Ability
   end
 
   module ClassMethods
-
     # @return [Hash] roles, scoped by user type
     def roles
-      private_instance_methods(false).inject({}) do |result, name|
+      private_instance_methods(false).each_with_object({}) do |name, result|
         prefix, scope, name = name.to_s.split('__')
-        next result unless prefix == "as" && scope && name
+        next result unless prefix == 'as' && scope && name
 
         result[scope.to_sym] ||= []
         result[scope.to_sym] << name
-        result
       end
     end
 
@@ -34,13 +32,13 @@ module Bsm::Sso::Client::Ability
 
       define_method(method_name) do
         return false if self.scope != scope || applied.include?(name.to_s)
+
         applied.add(name.to_s)
         instance_eval(&block)
         true
       end
       private method_name
     end
-
   end
 
   # @attr_reader [User] current user record
@@ -77,8 +75,7 @@ module Bsm::Sso::Client::Ability
 
   private
 
-    def administrator?
-      (@user.respond_to?(:level?) && @user.level.to_i >= 90) || (@user.respond_to?(:admin?) && @user.admin?)
-    end
-
+  def administrator?
+    (@user.respond_to?(:level?) && @user.level.to_i >= 90) || (@user.respond_to?(:admin?) && @user.admin?)
+  end
 end

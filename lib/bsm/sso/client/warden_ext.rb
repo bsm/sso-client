@@ -17,8 +17,8 @@ Warden::Manager.after_set_user do |user, warden, opts|
     warden.session(scope)['expire_at'] = Bsm::Sso::Client.expire_after.from_now.to_i
   elsif opts[:event] == :fetch &&
         warden.session(scope)['expire_at'].to_i < Time.now.to_i &&
-        warden.request.env["REQUEST_METHOD"] == "GET"
+        warden.request.env['REQUEST_METHOD'] == 'GET'
     warden.logout(scope)
-    throw :warden, :scope => scope, :message => :timeout
+    throw :warden, scope: scope, message: :timeout
   end
 end

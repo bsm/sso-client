@@ -7,28 +7,28 @@ describe Bsm::Sso::Client::Ability do
 
     attr_reader :is_admin, :is_any
 
-    as :client, "main:role" do
+    as :client, 'main:role' do
     end
 
-    as :client, "sub:role" do
-      same_as "main:role"
+    as :client, 'sub:role' do
+      same_as 'main:role'
     end
 
-    as :client, "other:role" do
+    as :client, 'other:role' do
     end
 
-    as :employee, "other:role" do
+    as :employee, 'other:role' do
     end
 
-    as :employee, "restrictive:role" do
+    as :employee, 'restrictive:role' do
       @is_any = nil
     end
 
-    as :employee, "any" do
+    as :employee, 'any' do
       @is_any = true
     end
 
-    as :employee, "administrator" do
+    as :employee, 'administrator' do
       @is_admin = true
     end
   end
@@ -41,25 +41,25 @@ describe Bsm::Sso::Client::Ability do
     end
   end
 
-  let(:client)      { new_user "client", 0, "sub:role" }
-  let(:employee)    { new_user "employee", 60 }
-  let(:restrictive) { new_user "employee", 60, "restrictive:role" }
-  let(:admin)       { new_user "employee", 90 }
+  let(:client)      { new_user 'client', 0, 'sub:role' }
+  let(:employee)    { new_user 'employee', 60 }
+  let(:restrictive) { new_user 'employee', 60, 'restrictive:role' }
+  let(:admin)       { new_user 'employee', 90 }
 
   subject do
     Bsm::Sso::Client::TestAbility.new(client)
   end
 
-  describe "class" do
+  describe 'class' do
     subject { Bsm::Sso::Client::TestAbility }
 
-    its("roles.size") { is_expected.to eq(2) }
+    its('roles.size') { is_expected.to eq(2) }
 
-    describe "roles" do
+    describe 'roles' do
       subject { Bsm::Sso::Client::TestAbility.roles }
       it { is_expected.to be_instance_of(Hash) }
-      its(:keys) { is_expected.to match_array([:employee, :client]) }
-      it "should be identified by user type" do
+      its(:keys) { is_expected.to match_array(%i[employee client]) }
+      it 'should be identified by user type' do
         expect(subject[:employee].size).to eq(4)
         expect(subject[:client].size).to eq(3)
       end
@@ -72,17 +72,17 @@ describe Bsm::Sso::Client::Ability do
   end
 
   its(:scope) { is_expected.to eq(:client) }
-  its(:applied) { is_expected.to eq(["main:role", "sub:role"].to_set) }
+  its(:applied) { is_expected.to eq(['main:role', 'sub:role'].to_set) }
 
   it 'should apply roles only once' do
-    expect(subject.same_as("main:role")).to be(false)
-    expect(subject.same_as("sub:role")).to be(false)
-    expect(subject.same_as("other:role")).to be(true)
+    expect(subject.same_as('main:role')).to be(false)
+    expect(subject.same_as('sub:role')).to be(false)
+    expect(subject.same_as('other:role')).to be(true)
   end
 
   it 'should not allow role application from different scopes' do
-    expect(subject.send("as__employee__other:role")).to be(false)
-    expect(subject.send("as__client__other:role")).to be(true)
+    expect(subject.send('as__employee__other:role')).to be(false)
+    expect(subject.send('as__client__other:role')).to be(true)
   end
 
   it 'should apply generic any role to ALL users (if defined)' do

@@ -10,15 +10,17 @@ class Bsm::Sso::Client::AbstractResource < Hash
     # @param [String] url
     def site=(url)
       @site = Excon.new url,
-        mock:       defined?(WebMock),
+        mock: defined?(WebMock),
         idempotent: true,
-        expects:    [200, 422],
-        headers:    { 'Accept' => Mime[:json].to_s, 'Content-Type' => Mime[:json].to_s }
+        expects: [200, 422],
+        headers: { 'Accept' => Mime[:json].to_s, 'Content-Type' => Mime[:json].to_s }
     end
 
     # @return [Excon::Connection] site connection
     def site
-      @site || (superclass.respond_to?(:site) && superclass.site) || raise("No site specified for #{name}. Please specify #{name}.site = 'http://your.sso.host'")
+      @site ||
+        (superclass.respond_to?(:site) && superclass.site) ||
+        raise("No site specified for #{name}. Please specify #{name}.site = 'http://your.sso.host'")
     end
 
     # @return [Hash] default headers
@@ -29,10 +31,10 @@ class Bsm::Sso::Client::AbstractResource < Hash
     # @param [String] path
     # @param [Hash] params, request params - see Excon::Connection#request
     # @return [Bsm::Sso::Client::AbstractResource] fetches object from remote
-    def get(path, params = {})
+    def get(path, params={})
       params[:query] ||= params.delete(:params)
       collection       = params.delete(:collection)
-      params           = params.merge(:path => path)
+      params           = params.merge(path: path)
       params[:headers] = (params[:headers] || {}).merge(headers)
 
       response = site.get(params)
@@ -52,18 +54,18 @@ class Bsm::Sso::Client::AbstractResource < Hash
 
   # Constuctor
   # @param [Hash,NilClass] attributes the attributes to assign
-  def initialize(attributes = nil)
+  def initialize(attributes=nil)
     super()
     update(attributes.stringify_keys) if attributes.is_a?(Hash)
   end
 
   # @return [Integer] ID, the primary key
   def id
-    self["id"]
+    self['id']
   end
 
   # @return [Boolean] true, if method exists?
-  def respond_to?(method, *)
+  def respond_to_missing?(method, *)
     super || key?(method.to_s.sub(/[=?]$/, ''))
   end
 
@@ -74,17 +76,18 @@ class Bsm::Sso::Client::AbstractResource < Hash
 
   protected
 
-    def method_missing(method, *arguments)
-      method, punctation = method.to_s.sub(/([=?])$/, ''), $1
+  def method_missing(method, *arguments)
+    method = method.to_s.sub(/([=?])$/, '')
+    punctation = Regexp.last_match(1)
 
-      case punctation
-      when "="
-        store(method, arguments.first)
-      when "?"
-        self[method]
-      else
-        key?(method) ? fetch(method) : super
-      end
+    case punctation
+    when '='
+      store(method, arguments.first)
+    when '?'
+      self[method]
+    else
+      key?(method) ? fetch(method) : super
     end
+  end
 
 end

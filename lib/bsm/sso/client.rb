@@ -42,14 +42,14 @@ module Bsm
       @@navigational_formats = [:html, :all, :js, nil].to_set
 
       mattr_reader :api_formats
-      @@api_formats = [:xml, :json].to_set
+      @@api_formats = %i[xml json].to_set
 
       mattr_accessor :cache_store
-      @@cache_store = ActiveSupport::Cache::NullStore.new :namespace => "bsm:sso:client:#{Rails.env}"
+      @@cache_store = ActiveSupport::Cache::NullStore.new namespace: "bsm:sso:client:#{Rails.env}"
 
       class << self
 
-        delegate :site=, :site, :to => :"Bsm::Sso::Client::AbstractResource"
+        delegate :site=, :site, to: :"Bsm::Sso::Client::AbstractResource"
 
         def user_class
           if @@user_class.respond_to?(:constantize)
@@ -62,6 +62,7 @@ module Bsm
         # Default message verifier
         def verifier
           raise "Please configure a secret! Example: Bsm::Sso::Client.secret = '...'" unless secret.present?
+
           @verifier ||= ActiveSupport::MessageVerifier.new(secret)
         end
 
@@ -89,7 +90,7 @@ module Bsm
         end
 
         # Raises an UnauthorizedAccess exception
-        def forbidden!(request, message = nil)
+        def forbidden!(request, message=nil)
           message ||= "You are not permitted to access the resource in #{request.path}"
           raise UnauthorizedAccess, message
         end

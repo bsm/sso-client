@@ -16,16 +16,15 @@ describe Bsm::Sso::Client::Cached::ActiveRecord, type: :model do
   end
 
   let :record do
-    args = [{id: 100, email: "alice@example.com", kind: "user", level: 10, authentication_token: "SECRET"}]
-    User.create! *args
+    User.create! id: 100, email: 'alice@example.com', kind: 'user', level: 10, authentication_token: 'SECRET'
   end
 
-  def resource(attrs = {})
+  def resource(attrs={})
     Bsm::Sso::Client::User.new record.attributes.merge(attrs)
   end
 
   let :new_resource do
-    Bsm::Sso::Client::User.new id: 200, email: "new@example.com"
+    Bsm::Sso::Client::User.new id: 200, email: 'new@example.com'
   end
 
   it { is_expected.to be_a(described_class) }
@@ -39,24 +38,24 @@ describe Bsm::Sso::Client::Cached::ActiveRecord, type: :model do
 
   it 'should not authorize blank tokens' do
     expect(Bsm::Sso::Client::User).not_to receive(:sso_authorize)
-    expect(User.sso_authorize(" ")).to be_nil
+    expect(User.sso_authorize(' ')).to be_nil
   end
 
   it 'should authorize as usual when user is not cached' do
     expect(Bsm::Sso::Client::User).to receive(:sso_authorize).and_return(nil)
-    expect(User.sso_authorize("SECRET")).to be_nil
+    expect(User.sso_authorize('SECRET')).to be_nil
   end
 
   it 'should used cached on authorize' do
     record # Create one
     expect(Bsm::Sso::Client::User).not_to receive(:sso_authorize)
-    expect(User.sso_authorize("SECRET")).to eq(record)
+    expect(User.sso_authorize('SECRET')).to eq(record)
   end
 
   it 'should not use cached on authorize when expired' do
     record.update_column :updated_at, 3.hours.ago
     expect(Bsm::Sso::Client::User).to receive(:sso_authorize).and_return(nil)
-    expect(User.sso_authorize("SECRET")).to be_nil
+    expect(User.sso_authorize('SECRET')).to be_nil
   end
 
   it 'should cache (and create) new records' do
@@ -67,32 +66,32 @@ describe Bsm::Sso::Client::Cached::ActiveRecord, type: :model do
   end
 
   it 'should cache (and update) existing records when changed' do
-    expect {
+    expect do
       expect(User.sso_cache(resource(level: 20))).to eq(record)
-    }.to change { record.reload.level }.from(10).to(20)
+    end.to change { record.reload.level }.from(10).to(20)
 
-    expect {
-      expect(User.sso_cache(resource("level" => 10))).to eq(record)
-    }.to change { record.reload.level }.from(20).to(10)
+    expect do
+      expect(User.sso_cache(resource('level' => 10))).to eq(record)
+    end.to change { record.reload.level }.from(20).to(10)
   end
 
   it 'should cache (and touch) existing records even when unchanged' do
-    expect {
+    expect do
       expect(User.sso_cache(resource)).to eq(record)
-    }.to change { record.reload.updated_at }
+    end.to change { record.reload.updated_at }
   end
 
   it 'should only cache known attributes' do
-    expect {
-      expect(User.sso_cache(resource(unknown: "value"))).to eq(record)
-    }.to change { record.reload.updated_at }
+    expect do
+      expect(User.sso_cache(resource(unknown: 'value'))).to eq(record)
+    end.to change { record.reload.updated_at }
   end
 
   it 'should only cache known attributes for new records' do
     record.destroy
-    expect {
-      User.sso_cache(resource(unknown: "value"))
-    }.not_to raise_error
+    expect do
+      User.sso_cache(resource(unknown: 'value'))
+    end.not_to raise_error
   end
 
 end

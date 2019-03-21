@@ -10,7 +10,6 @@ module Bsm::Sso::Client::Cached::ActiveRecord
   end
 
   module ClassMethods
-
     # Retrieve cached
     def sso_find(id)
       where(id: id).first || super
@@ -26,13 +25,12 @@ module Bsm::Sso::Client::Cached::ActiveRecord
     end
 
     # Cache!
-    def sso_cache(resource, action = nil)
+    def sso_cache(resource, _action=nil)
       record = where(id: resource.id).first_or_initialize
       attrs  = [resource.attributes.slice(*record.attribute_names)]
       record.assign_attributes(*attrs)
       record.changed? ? record.save! : record.touch
       record
     end
-
   end
 end

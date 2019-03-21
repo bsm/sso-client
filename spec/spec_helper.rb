@@ -1,7 +1,7 @@
-$TESTING=true
-$:.unshift File.dirname(__FILE__)
-$:.unshift File.expand_path('../../lib', __FILE__)
-ENV["RAILS_ENV"] ||= 'test'
+$TESTING = true # rubocop:disable Style/GlobalVars
+$LOAD_PATH.unshift File.dirname(__FILE__)
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
+ENV['RAILS_ENV'] ||= 'test'
 
 require 'rubygems'
 require 'bundler/setup'
@@ -15,22 +15,22 @@ WebMock.disable_net_connect!
 require 'rails'
 require 'bsm/sso/client'
 
-Dir[File.join(File.dirname(__FILE__), "support", "**/*.rb")].each do |f|
+Dir[File.join(File.dirname(__FILE__), 'support', '**/*.rb')].each do |f|
   require f
 end
 
-Bsm::Sso::Client.site = "https://sso.test.host"
+Bsm::Sso::Client.site = 'https://sso.test.host'
 Bsm::Sso::Client.expire_after = 1.hour
 
 RSpec.configure do |c|
   c.include(Bsm::Sso::Client::SpecHelpers)
 
   c.before do
-    allow(Bsm::Sso::Client).to receive_messages secret: "SECRET"
+    allow(Bsm::Sso::Client).to receive_messages secret: 'SECRET'
   end
 end
 
-ActiveRecord::Base.configurations["test"] = { 'adapter' => 'sqlite3', 'database' => ":memory:" }
+ActiveRecord::Base.configurations['test'] = { 'adapter' => 'sqlite3', 'database' => ':memory:' }
 ActiveRecord::Base.establish_connection(:test)
 ActiveRecord::Base.connection.create_table :users do |t|
   t.string  :email
