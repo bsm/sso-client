@@ -33,7 +33,7 @@ describe Bsm::Sso::Client::AbstractResource do
                       'a'             => 1,
                     }).to_return status: 200, body: %({ "id": 123 })
 
-    result  = described_class.get('/users/123', headers: { 'a' => 1 }, query: { 'b' => 2 })
+    result = described_class.get('/users/123', headers: { 'a' => 1 }, query: { 'b' => 2 })
     expect(result).to be_instance_of(described_class)
     expect(result).to eq('id' => 123)
     expect(result.id).to eq(123)
@@ -57,7 +57,7 @@ describe Bsm::Sso::Client::AbstractResource do
                       'a'             => 1,
                     }).to_return status: 200, body: %([{ "id": 123 }])
 
-    result  = described_class.get('/users', headers: { 'a' => 1 }, query: { 'b' => 2 }, collection: true)
+    result = described_class.get('/users', headers: { 'a' => 1 }, query: { 'b' => 2 }, collection: true)
     expect(result).to be_an(Array)
     expect(result.first).to be_instance_of(described_class)
     expect(result.first).to eq('id' => 123)

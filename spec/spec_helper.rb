@@ -30,7 +30,7 @@ RSpec.configure do |c|
   end
 end
 
-ActiveRecord::Base.configurations['test'] = { 'adapter' => 'sqlite3', 'database' => ':memory:' }
+ActiveRecord::Base.configurations = { 'test' => { 'adapter' => 'sqlite3', 'database' => ':memory:' } }
 ActiveRecord::Base.establish_connection(:test)
 ActiveRecord::Base.connection.create_table :users do |t|
   t.string  :email

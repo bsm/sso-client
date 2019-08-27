@@ -4,7 +4,7 @@ describe Bsm::Sso::Client::User do
 
   it 'should find instance' do
     request = stub_request(:get, 'https://sso.test.host/users/1').with do |req|
-      expect(req.headers.keys).to match_array(['Accept', 'Authorization', 'Content-Type', 'Host'])
+      expect(req.headers.keys).to match_array(%w[Accept Authorization Content-Type Host])
     end.to_return status: 200, body: %({ "id": 1 })
     instance = described_class.sso_find(1)
     expect(instance).to be_instance_of(described_class)
@@ -14,7 +14,7 @@ describe Bsm::Sso::Client::User do
 
   it 'should find all instances' do
     request = stub_request(:get, 'https://sso.test.host/users?only=clients').with do |req|
-      expect(req.headers.keys).to match_array(['Accept', 'Authorization', 'Content-Type', 'Host'])
+      expect(req.headers.keys).to match_array(%w[Accept Authorization Content-Type Host])
     end.to_return status: 200, body: %([{ "id": 1 }])
     instances = described_class.all(params: { only: 'clients' }) # mimic ARes with params
     expect(instances).to be_an(Array)

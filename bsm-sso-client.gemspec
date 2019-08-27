@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
-  s.required_ruby_version = '>= 2.2.2'
+  s.required_ruby_version = '>= 2.5'
 
   s.name        = 'bsm-sso-client'
   s.summary     = "BSM's internal SSO client"

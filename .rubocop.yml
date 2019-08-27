@@ -3,12 +3,11 @@ inherit_from:
 
 AllCops:
   TargetRubyVersion: "2.5"
-
+Style/AccessModifierDeclarations:
+  Enabled: false
 Style/ClassVars:
   Enabled: false
-
 Style/DoubleNegation:
   Enabled: false
-
 Naming/FileName:
   Enabled: false
