@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.name        = 'bsm-sso-client'
   s.summary     = "BSM's internal SSO client"
   s.description = ''
-  s.version     = '0.12.0'
+  s.version     = '0.12.1'
 
   s.authors     = ['Dimitrij Denissenko']
   s.email       = 'dimitrij@blacksquaremedia.com'
@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'activesupport'
   s.add_dependency 'excon', '>= 0.27.5', '< 1'
   s.add_dependency 'rails_warden', '~> 0.5.0'
-  s.add_dependency 'railties', '>= 5.0.0', '< 6.0.0'
+  s.add_dependency 'railties', '>= 5.0.0', '< 7.0.0'
 
   s.add_development_dependency 'activerecord'
   s.add_development_dependency 'cancan'
@@ -29,6 +29,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec-its'
   s.add_development_dependency 'rubocop'
   s.add_development_dependency 'shoulda-matchers'
-  s.add_development_dependency 'sqlite3', '~> 1.3.6'
+  s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'webmock'
 end
